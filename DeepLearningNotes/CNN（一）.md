@@ -57,7 +57,7 @@ $$(f*g)(m,n)=\sum_i\sum_j{f(i,j)g(m-i,n-j)}$$
 
 
 
-  那么，两枚骰子点数加起来为４的情况有：
+那么，两枚骰子点数加起来为４的情况有：
   
 ![enter description here](./images/2.jpg)　![enter description here](./images/3.jpg)　![enter description here](./images/4.jpg)
  
