@@ -127,12 +127,97 @@ RCNN算法分为4个步骤
 ###### 1、边框回归是什么？
 继续借用师兄的理解：对于窗口一般使用四维向量 (x,y,w,h) 来表示， 分别表示窗口的中心点坐标和宽高。 对于图 2, 红色的框 P 代表原始的Proposal, 绿色的框 G 代表目标的 Ground Truth， 我们的目标是寻找一种关系使得输入原始的窗口 P 经过映射得到一个跟真实窗口 G 更接近的回归窗口 `!$\hat G$`。
 
+![enter description here](./images/1560969790934.png)
+
+边框回归的目的既是：给定 `!$(P_x,P_y,P_w,P_h)$` 寻找一种映射 `!$f$`， 使得 `!$f(P_x,P_y,P_w,P_h)=(\hat G_x,\hat G_y,\hat G_w,\hat G_h)$`  并且 `!$(\hat G_x,\hat G_y,\hat G_w,\hat G_h)\approx (G_x,G_y,G_w,G_h)$`
+
+###### 2、边框回归怎么做的？
+那么经过何种变换才能从图 2 中的窗口 P 变为窗口 `!$\hat G$` 呢？ 比较简单的思路就是: 平移+尺度放缩：
+
+ 1. 先做平移 `!$(\Delta x,\Delta y)， \Delta x=P_w d_x(P),\Delta y=P_h d_y(P) $`，这是R-CNN论文的：
+```mathjax!
+$$
+\hat G_x = P_w d_x(P) + P_x \ \ \ \ \ \ \  \text(1)  \\
+\hat G_y= P_h d_y(P) + P_y  \ \ \ \ \ \ \  \text(2)
+$$
+```
+
+ 2. 然后再做尺度缩放 `!$(S_w,S_h), S_w=exp(d_w(P)),S_h=exp(d_h(P))$`，对应论文中：
+```mathjax!
+$$
+\hat G_w= P_w exp(d_w(P) ) \ \ \ \ \ \ \  \text(3)  \\
+\hat G_h= P_h exp(d_h(P) ) \ \ \ \ \ \ \  \text(4)
+$$
+```
+
+观察(1)-(4)我们发现， 边框回归学习就是 `!$d_x(P),d_y(P),d_w(P),d_h(P)$` 这四个变换。下一步就是设计算法那得到这四个映射。
+
+线性回归就是给定输入的特征向量 X, 学习一组参数 W, 使得经过线性回归后的值跟真实值 Y(Ground Truth)非常接近. 即 `!$Y\approx WX $`。 那么 Bounding-box 中我们的输入以及输出分别是什么呢？
+
+<p style="font-size:160%;font-weight:bold">Input:</p>
+
+`!$\text{RegionProposal}→P=(P_x,P_y,P_w,P_h)$`，这个是什么？ 输入就是这四个数值吗？其实真正的输入是这个窗口对应的 CNN 特征，也就是 R-CNN 中的 Pool5 feature（特征向量）。 (注：训练阶段输入还包括 Ground Truth， 也就是下边提到的 `!$t_∗=(t_x,t_y,t_w,t_h)$`
+
+<p style="font-size:160%;font-weight:bold">Output:</p>
+
+需要进行的平移变换和尺度缩放 `!$d_x(P),d_y(P),d_w(P),d_h(P)$`， 或者说是 `!$\Delta x,\Delta y,S_w,S_h$` 。 我们的最终输出不应该是 Ground Truth 吗？ 是的， 但是有了这四个变换我们就可以直接得到 Ground Truth， 这里还有个问题， 根据(1)~(4)我们可以知道， P 经过 `!$d_x(P),d_y(P),d_w(P),d_h(P)$` 得到的并不是真实值 G， 而是预测值 `!$\hat G$`。 的确， 这四个值应该是经过 Ground Truth 和 Proposal 计算得到的真正需要的平移量 `!$(tx,ty)$` 和尺度缩放`!$(tw,th)$` 。 这也就是 R-CNN 中的(6)~(9)： 
+```mathjax!
+$$
+t_x = (G_x - P_x) / P_w \ \ \ \ \  (6)  \\
+t_y = (G_y - P_y) / P_h \ \ \ \ \ \  (7)  \\
+t_w = \log (G_w / P_w) \ \ \ \ \ \ \ \  (8)  \\
+t_h = \log(G_h / P_h) \ \ \ \ \ \ \ \ \   (9)
+$$
+```
+那么目标函数可以表示为 `!$d_∗(P)=w^T_∗\Phi_5(P)$`， `!$\Phi_5(P)$` 是输入 Proposal 的特征向量，`!$w_*$` 是要学习的参数（\*表示 x,y,w,h， 也就是每一个变换对应一个目标函数） ,`!$ d_∗(P)$` 是得到的预测值。 我们要让预测值跟真实值 `!$t_∗=(t_x,t_y,t_w,t_h)$` 差距最小， 得到损失函数为：
+```mathjax!
+$$
+Loss = \sum_i^N(t_*^i - \hat w_*^T\phi_5(P^i))^2
+$$
+```
+函数优化目标为：
+```mathjax!
+$$
+W_* = argmin_{w_*} \sum_i^N(t_*^i - \hat w_*^T\phi_5(P^i))^2 + \lambda || \hat w_*||^2
+$$
+```
+利用梯度下降法或者最小二乘法就可以得到 `!$w_∗$`。
+
+###### 3、为什么宽高尺度会设计这种形式？
+为什么设计的 `!$t_x,t_y$` 为什么除以宽高，为什么 `!$t_w,t_h$` 会有log形式？
+
+首先CNN具有尺度不变性:
+
+![enter description here](./images/1561015026952.png)
+
+**x,y 坐标除以宽高**
+上图的两个人具有不同的尺度，因为他都是人，我们得到的特征相同。假设我们得到的特征为 `!$\Phi_1,\Phi_2$`，那么一个完好的特征应该具备 `!$\Phi_1 = \Phi$`。如果我们直接学习坐标差值，以 x 坐标为例，`!$x_i,p_i$` 分别代表第 i 个框的x坐标，学习到的映射为 f , `!$f(\Phi_1)=x_1−p_1$`，同理`!$f(\Phi_2)=x_2−p_2$`。从上图显而易见，`!$x_1−p_1\neq x_2−p_1$`。也就是说同一个x对应多个 y，这明显不满足函数的定义。边框回归学习的是回归函数，然而你的目标却不满足函数定义，当然学习不到什么。
+
+**宽高坐标Log形式**
+我们想要得到一个放缩的尺度，也就是说这里限制尺度必须大于 0。我们学习的 `!$t_w,t_h$`怎么保证满足大于0呢？直观的想法就是EXP函数，如公式(3), (4)所示，那么反过来推导就是Log函数的来源了。
+
+###### 4、为什么IoU较大，认为是线性变换？
+当输入的 Proposal 与 Ground Truth 相差较小时(RCNN 设置的是 IoU>0.6)， 可以认为这种变换是一种线性变换， 那么我们就可以用线性回归来建模对窗口进行微调， 否则会导致训练的回归模型不 work（当 Proposal跟 GT 离得较远，就是复杂的非线性问题了，此时用线性回归建模显然不合理）。
+
+Log函数明显不满足线性函数，但是为什么当Proposal 和Ground Truth相差较小的时候，就可以认为是一种线性变换呢？
+```mathjax!
+$$
+lim_{x=0}log(1+x) = x
+$$
+```
+现在回过来看公式(8):
+```mathjax!
+$$
+t_w = \log (G_w / P_w) = log(\frac{G_w + P_w - P_w}{P_w}) = log(1 + \frac{G_w-P_w}{P_w})
+$$
+```
+当且仅当 `!$G_w−P_w=0$` 的时候，才会是线性函数，也就是宽度和高度必须近似相等。
 
 ### （三）结果
 论文发表的2014年，DPM已经进入瓶颈期，即使使用复杂的特征和结构得到的提升也十分有限。本文将深度学习引入检测领域，一举将PASCAL VOC上的检测率从35.1%提升到53.7%。 
 
 # 二、Fast R-CNN
-**论文：Fast R-CNN          Microsoft Research**
+**论文：Fast R-CNN          ——        Microsoft Research**
 
 ### （一）、解决的问题
 Fast R-CNN方法解决了R-CNN的三个问题：
@@ -176,5 +261,3 @@ Fast R-CNN是端到端（end-to-end）的。
 |  R-CNN(Region-based Convolutional Neural Networks)   |  1、SS提取RP；2、CNN提取特征；3、SVM分类；4、BB盒回归。   |   1、 训练步骤繁琐（微调网络+训练SVM+训练bbox）；2、 训练、测试均速度慢 ；3、 训练占空间  |   1、 从DPM HSC的34.3%直接提升到了66%（mAP）；2、 引入RP+CNN  |
 |  Fast R-CNN(Fast Region-based Convolutional Neural Networks)   |  1、SS提取RP；2、CNN提取特征；3、softmax分类；4、多任务损失函数边框回归。   |  1、 依旧用SS提取RP(耗时2-3s，特征提取耗时0.32s)；2、 无法满足实时应用，没有真正实现端到端训练测试；3、 利用了GPU，但是区域建议方法是在CPU上实现的。   |  1、 由66.9%提升到70%；2、 每张图像耗时约为3s。   |
 |  Faster R-CNN(Fast Region-based Convolutional Neural Networks)   |  1、RPN提取RP；2、CNN提取特征；3、softmax分类；4、多任务损失函数边框回归。   |   1、 还是无法达到实时检测目标；2、 获取region proposal，再对每个proposal分类计算量还是比较大。  |   1、 提高了检测精度和速度；2、  真正实现端到端的目标检测框架；3、  生成建议框仅需约10ms。  |
-
-# 四、Mask R-CNN
