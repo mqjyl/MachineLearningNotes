@@ -393,7 +393,7 @@ $$
  
  这两点在GCN中是怎样的呢？以下图的graph结构为例来探究一下：
  
-![enter description here](./images/10.png)
+![enter description here](./images/1559820768438.png)
 
 ###### 1. **GCN中的Local Connectivity**
 
