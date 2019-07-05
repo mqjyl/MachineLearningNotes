@@ -1,6 +1,6 @@
 ---
 title: K-近邻法
-tags: 分类方法,近邻法,KNN
+tags: 分类方法,近邻法,KNN,监督学习
 grammar_cjkRuby: true
 ---
 
