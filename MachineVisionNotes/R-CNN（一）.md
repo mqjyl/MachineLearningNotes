@@ -1,5 +1,5 @@
 ---
-title: R-CNN（一） 
+title: 目标检测之Two-Stage 
 tags: R-CNN,Fast R-CNN,Faster R-CNN,Mask R-CNN
 grammar_cjkRuby: true
 grammar_html: true
@@ -231,9 +231,9 @@ Fast R-CNN方法解决了R-CNN的三个问题：
 
  1. R-CNN网络训练、测试速度都很慢：R-CNN网络中，一张图经由selective search算法提取约2k个建议框【这2k个建议框大量重叠】，而所有建议框变形后都要输入AlexNet CNN网络提取特征【即约2k次特征提取】，会出现上述重叠区域多次重复提取特征，提取特征操作冗余；
 
- 2. R-CNN网络训练、测试繁琐：R-CNN网络训练过程分为ILSVRC 2012样本下有监督预训练、PASCAL VOC 2007该特定样本下的微调、20类即20个SVM分类器训练、20类即20个Bounding-box回归器训练，该训练流程繁琐复杂；同理测试过程也包括提取建议框、提取CNN特征、SVM分类和Bounding-box回归等步骤，过于繁琐；
+ 2. R-CNN网络训练、测试繁琐：R-CNN网络训练过程分为ILSVRC 2012样本下有监督预训练、PASCAL VOC 2007该特定样本下的微调、20类即21个SVM分类器训练、20类即20个Bounding-box回归器训练，该训练流程繁琐复杂；同理测试过程也包括提取建议框、提取CNN特征、SVM分类和Bounding-box回归等步骤，过于繁琐；
 
- 3. R-CNN网络训练需要大量存储空间：20类即20个SVM分类器和20类即20个Bounding-box回归器在训练过程中需要大量特征作为训练样本，这部分从CNN提取的特征会占用大量存储空间；
+ 3. R-CNN网络训练需要大量存储空间：20类即21个SVM分类器和20类即20个Bounding-box回归器在训练过程中需要大量特征作为训练样本，这部分从CNN提取的特征会占用大量存储空间；
 
  4. R-CNN网络需要对建议框进行形变操作后【形变为227×227 size】再输入CNN网络提取特征，其实像AlexNet CNN等网络在提取特征过程中对图像的大小并无要求，只是在提取完特征进行全连接操作的时候才需要固定特征尺寸【R-CNN中将输入图像形变为227×227可正好满足AlexNet CNN网络最后的特征尺寸要求】，然后才使用SVM分类器分类，R-CNN需要进行形变操作的问题在Fast R-CNN已经不存在。
 
