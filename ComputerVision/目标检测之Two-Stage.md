@@ -28,9 +28,9 @@ RCNN算法分为4个步骤
 - 将特征送入每一类的**SVM 分类器**，判别是否属于该类 
 - 使用**回归器**精细修正候选框位置 
 
-![enter description here](./images/1560522620759.png)
+![Fast RCNN](./images/1560522620759.png)
 
-![enter description here](./images/1567858717880.png)
+![Fast RCNN](./images/1567858717880.png)
 
 #### 1、候选区域生成
 使用了Selective Search方法从一张图像生成约2000-3000个候选区域（Region Proposal）。基本思路如下： 
