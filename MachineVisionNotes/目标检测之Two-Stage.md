@@ -30,6 +30,8 @@ RCNN算法分为4个步骤
 
 ![enter description here](./images/1560522620759.png)
 
+![enter description here](./images/1567858717880.png)
+
 #### 1、候选区域生成
 使用了Selective Search方法从一张图像生成约2000-3000个候选区域（Region Proposal）。基本思路如下： 
 - 使用一种过分割手段，将图像分割成小区域 
@@ -298,6 +300,8 @@ Fast R-CNN的网络结构如下图所示：
 
 ### （四）、训练过程
 ##### 1、有监督预训练
+
+
 
 ##### 2、特定样本下的微调
 
