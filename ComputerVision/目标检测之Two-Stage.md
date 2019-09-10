@@ -257,7 +257,7 @@ Fast R-CNN是端到端（end-to-end）的。
 ### （三）、测试过程
 Fast R-CNN的网络结构如下图所示：
 
-![enter description here](./images/1561038988476.png)
+![Fast RCNN算法流程](./images/1561038988476.png)
 
  1. 任意size图片输入CNN网络，经过若干卷积层与池化层，得到特征图；
 
