@@ -843,11 +843,11 @@ $$
 
 ![图21 stage1_fast_rcnn_train.pt](./images/1569854220772.png)
 
-之后的stage2训练都是大同小异，不再赘述了。Faster R-CNN还有一种end-to-end的训练方式，可以一次完成train，有兴趣请自己看作者GitHub吧。
+之后的 stage2 训练都是大同小异，不再赘述了。Faster R-CNN还有一种end-to-end的训练方式，可以一次完成train，有兴趣请自己看作者GitHub吧。
 
 ### 7、Questions and Answer
 #### 7.1、为什么Anchor坐标中有负数
-回顾anchor生成步骤：首先生成9个base anchor，然后通过坐标偏移在 `!$50*38$` 大小的 `!$\frac{1}{16}$` 下采样FeatureMap每个点都放上这9个base anchor，就形成了 `!$50*38*k$` 个anhcors。至于这9个base anchor坐标是什么其实并不重要，不同代码实现也许不同。
+回顾anchor生成步骤：首先生成 9 个base anchor，然后通过坐标偏移在 `!$50*38$` 大小的 `!$\frac{1}{16}$` 下采样FeatureMap每个点都放上这 9 个base anchor，就形成了 `!$50*38*k$` 个anhcors。至于这 9 个base anchor坐标是什么其实并不重要，不同代码实现也许不同。
 
 显然这里面有一部分边缘anchors会超出图像边界，而真实中不会有超出图像的目标，所以会有clip anchor步骤。
 
@@ -867,9 +867,6 @@ VGG输出 `!$50*38*512$` 的特征，对应设置 `!$50*38*k$` 个anchors，而R
 ### 8、整体结构
 
 ![Faster RCNN 模型完整流程图](./images/1567839037356.png)
-
-
-
 
 
 # 总结
