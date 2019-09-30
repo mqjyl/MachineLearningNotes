@@ -346,17 +346,38 @@ Fast R-CNN的网络结构如下图所示：
 - ②最后一个全连接层和softmax被替换成之前介绍过的两个兄弟并列层
 - ③网络输入两组数据：一组图片和那些图片的一组RoIs
 
-##### 5.1.2、分类与位置调整
-###### 5.1.2.1、数据结构
+##### 5.1.2、roi_pool层的训练(backward)
+首先考虑普通max pooling层。设 `!$x_i$` 为输入层的节点，`!$y_j$` 为输出层的节点。
+```mathjax!
+$$
+\frac{\partial L}{\partial x_i}=\begin{cases} 0 & \delta(i,j)=false \\
+\frac{\partial L}{\partial y_i} & \delta(i,j)=true \end{cases}
+$$
+```
+其中判决函数 `!$\delta(i,j)$` 表示 i 节点是否被 j 节点选为最大值输出。不被选中有两种可能：`!$x_i$` 不在 `!$y_j$` 范围内，或者 `!$x_i$` 不是最大值。
+
+对于roi max pooling，一个输入节点可能和多个输出节点相连。设 `!$x_i$` 为输入层的节点，`!$y_{rj}$` 为第 `!$r$` 个候选区域的第 `!$j$` 个输出节点。
+
+![enter description here](./images/1569828597412.png)
+
+```mathjax!
+$$
+\frac{∂L}{∂x_i}=\sum_{r,j} \delta(i,r,j)\frac{\partial L}{\partial y_{rj}}
+$$
+```
+判决函数 `!$\delta(i,r,j)$` 表示i节点是否被候选区域 r 的第 j 个节点选为最大值输出。代价对于 `!$x_i$` 的梯度等于所有相关的后一层梯度之和。
+
+##### 5.1.3、分类与位置调整
+###### 5.1.3.1、数据结构
 第五阶段的特征输入到两个并行的全连层中（称为multi-task）。
 
 ![enter description here](./images/1569826957855.png)
 
->cls_score层用于分类，输出K+1维数组p，表示属于K类和背景的概率。
-bbox_prdict层用于调整候选区域位置，输出4*K维数组t，表示分别属于K类时，应该平移缩放的参数。
+>cls_score层用于分类，输出 `!$K+1$` 维数组p，表示属于 K 类和背景的概率。
+bbox_prdict层用于调整候选区域位置，输出 `!$4\times K$` 维数组 t，表示分别属于 K 类时，应该平移缩放的参数。
 
-###### 5.1.2.2、代价函数
-loss_cls层评估分类代价。由真实分类 u 对应的概率决定：
+###### 5.1.3.2、代价函数
+loss_cls层评估分类代价。由真实分类 `!$u$` 对应的概率决定：
 ```mathjax!
 $$
 L_{cls} = −log\ p_u
@@ -384,7 +405,7 @@ $$
 ```
 >源码中bbox_loss_weights用于标记每一个bbox是否属于某一个类
 
-###### 5.1.2.3、全连接层提速
+###### 5.1.3.3、全连接层提速
 分类和位置调整都是通过全连接层(fc)实现的，设前一级数据为 x 后一级为 y，全连接层参数为W，尺寸`!$u×v$`。一次前向传播(forward)即为：
 ```mathjax!
 $$
@@ -392,7 +413,7 @@ y=Wx
 $$
 ```
 计算复杂度为`!$u×v$`。
-将W进行SVD分解，并用前t个特征值近似：
+将W进行SVD分解，并用前 t 个特征值近似：
 ```mathjax!
 $$
 W=U\sum V^T \approx U(:,1:t)⋅\sum (1:t,1:t)⋅V(:,1:t)^T
@@ -417,7 +438,7 @@ $$
 &nbsp;&nbsp;&nbsp;&nbsp;使用BP算法训练网络是Fast R-CNN的重要能力，前面已经说过，SPP-net不能微调spp层之前的层，主要是因为当每一个训练样本来自于不同的图片时，经过SPP层的BP算法是很低效的（感受野太大）. Fast R-CNN提出SGD mini_batch分层取样的方法：首先随机取样N张图片，然后每张图片取样R/N个RoIs e.g. N=2 and R=128 除了分层取样，还有一个就是FRCN在一次微调中联合优化softmax分类器和bbox回归，看似一步，实际包含了多任务损失（multi-task loss）、小批量取样（mini-batch sampling）、RoI pooling层的反向传播（backpropagation through RoI pooling layers）、SGD超参数（SGD hyperparameters）。
 
 ##### 5.2.1、分层数据
-在调优训练时，每一个mini-batch中首先加入N张完整图片，而后加入从N张图片中选取的R个候选框。这R个候选框可以复用N张图片前5个阶段的网络特征。
+在调优训练时，每一个mini-batch中首先加入N张完整图片，而后加入从 N 张图片中选取的 R 个候选框。这 R 个候选框可以复用 N 张图片前5个阶段的网络特征。
 
 >实际选择N=2， R=128。
 
