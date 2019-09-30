@@ -5,11 +5,11 @@ grammar_cjkRuby: true
 grammar_html: true
 ---
 
-###### 计算机视觉的任务：
+**计算机视觉的任务：**
 
 ![enter description here](./images/1560521405047.png)
 
-# 一、R-CNN
+## 一、R-CNN
 **论文：Rich feature hierarchies for accurate object detection and semantic segmentation**
 
 ### 1、解决的问题
@@ -225,7 +225,7 @@ $$
 ### 3、结果
 论文发表的2014年，DPM已经进入瓶颈期，即使使用复杂的特征和结构得到的提升也十分有限。本文将深度学习引入检测领域，一举将PASCAL VOC上的检测率从35.1%提升到53.7%。 
 
-# 二、Fast R-CNN
+## 二、Fast R-CNN
 **论文：Fast R-CNN          ——        Microsoft Research**
 
 ### 1、解决的问题
@@ -459,7 +459,7 @@ R个候选框的构成方式如下：
 - 网络直接输出各类概率(softmax)，比SVM分类器性能略好
 - 更多候选窗不能提升性能
 
-# 三、Faster R-CNN
+## 三、Faster R-CNN
 
 ![Faster RCNN 模型完整流程图](./images/1567839037356.png)
 
