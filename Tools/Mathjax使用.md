@@ -23,6 +23,10 @@ $$
 
 ![enter description here](./images/t1.png)
 
+![enter description here](./images/1569829927534.png)
+
+![enter description here](./images/1569829965715.png)
+
 ##### 3、上标与下标
 上标和下标分别使用 \^ 与 _ ，例如 x_i^2: `!$x_i^2$`。默认情况下，上下标符号仅对下一个组起作用。一个组即单个字符或者使用 {...} 包裹起来的内容。也就是说，如果使用10\^10，会得到 `!$10^10$`，而 10\^{10} 才是 `!$10^{10}$`。同时，大括号还能消除二义性，如 x\^5\^6 将得到一个错误，必须使用大括号来界定 \^ 的结合性，如 {x\^5}\^6: `!${x^5}^6$` 或者 x\^{5\^6}: `!$x^{5^6}$`。
 
@@ -98,7 +102,11 @@ $$
 
 ![enter description here](./images/t6.png)
 
-![enter description here](./images/t7.png)
+![enter description here](./images/1569829069099.png)
+
+![enter description here](./images/1569829626165.png)
+
+![enter description here](./images/1569829662737.png)
 
 ##### 9、空间
 通常MathJax通过内部策略自己管理公式内部的空间，因此a...b与a......b( . 表示空格)都会显示为 `!$a  b$`。可以通过在 ab 间加入\\,（逗号）增加些许间隙，\\;（分号）增加较宽间隙，\quad 与 \qquad 会增加更大的间隙，如 `!$a\ \,\;\quad \qquad b$`。
@@ -140,6 +148,18 @@ $$
 ![enter description here](./images/1559210394757.png)
 
  **注：一些MathJax使用的特殊字符，可以使用 \\ 转义为原来的含义，如 \\\$ 表示 $ , \\\_ 表示下划线。**
+ 
+ ##### 11、关系运算符
+ 
+ ![enter description here](./images/1569829750257.png)
+ 
+ ##### 12、集合运算符
+ 
+ ![enter description here](./images/1569829856952.png)
+ 
+ ##### 13、逻辑运算符
+ 
+ ![enter description here](./images/1569830092076.png)
  
  #### 三、表格
  使用 \$\$\begin{array}{列样式}...\end{array}\$\$ 这样的形式来创建表格，列样式可以是 clr 表示居中，左，右对齐，还可以使用 | 表示一条竖线。表格中各行使用 \\ 分隔，各列使用 & 分隔，使用 \hline 在本行前加入一条直线。例如 
