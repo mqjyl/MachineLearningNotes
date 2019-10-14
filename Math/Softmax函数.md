@@ -40,7 +40,7 @@ $$
 
 ![enter description here](./images/1571025265323.png)
  
-#### 3、推导
+#### 3、推导（softmax的可以作为最终概率的证明）
 
 虽然Softmax函数得到的是一个 `!$[0,1]$` 之间的值，且 `!$\sum_{i = 1}^{K} P(i) = 1$` ，但是这个softmax求出的概率是否就是真正的概率？换句话说，**这个概率是否严格等于期望呢？**
 
@@ -51,7 +51,25 @@ $$
 \phi i = P(y = i,\phi),i = 1,\ldots ,K-1.\ \ \ \ \  \phi(K)=1 - \sum_{i = 1}^{K - 1} \phi i
 $$
 ```
-引入 `!$K - 1$` 个 K 维列向量（即参数） `!$T(y),y=1,\ldots ,K-1$`，样本属于第 `!$i$` 类则第 `!$i$` 行元素为1，其余为0，即：`!$(T(y))_i = 1$`。
+引入  `!$T(y),y=1,\ldots ,K-1$`，它是一个 `!$K-1$` 维的向量，如下所示：
+```mathjax!
+$$
+T(1)=\begin {bmatrix}
+1\\ 0\\0\\0\\.\\.\\0\end{bmatrix}
+\quad
+T(2)=\begin {bmatrix}
+0\\ 1\\0\\0\\.\\.\\0\end{bmatrix}
+\quad
+...
+T(K-1)=\begin {bmatrix}
+0\\ 0\\0\\0\\.\\.\\1\end{bmatrix}
+\quad
+T(K)=\begin {bmatrix}
+ 0\\ 0\\0\\0\\.\\.\\0\end{bmatrix}
+$$
+```
+
+样本属于第 `!$i$` 类则第 `!$i$` 行元素为1，其余为0，即：`!$(T(i))_i = 1$`。
 因为 `!$y$` 只能属于 1 类，故( `!$y$` 不等于 `!$K$` 时) `!$T(y)$`只有一个元素为 1，其余元素都为 0，则 `!$y$` 的期望为：
 ```mathjax!
 $$
@@ -64,6 +82,8 @@ $$
 e^{\beta_i} = \frac{\phi_i}{\phi_K} \Rightarrow \phi_K = \frac{\phi_i}{e^{\beta_i}} \Rightarrow \phi_K \sum_i^K e^{\beta_i} = \sum_i^K \phi_i = 1  \tag{3.2}
 $$
 ```
+**注意观察：第三个式子是在第一个式子的左右乘以 `!$\phi_K$` ,然后累加求和。**
+
 所以
 ```mathjax!
 $$
@@ -377,5 +397,3 @@ softmax建模使用的分布是多项式分布，而logistic则基于伯努利�
   
 ###### 7.3、softmax回归和多个logistic回归的关系。
 softmax回归进行的多分类，类与类之间是互斥的，即一个输入只能被归为一类；多个logistic回归进行多分类，输出的类别并不是互斥的，即"苹果"这个词语既属于"水果"类也属于"3C"类别。
-
-#### 8、Softmax和交叉熵损失
