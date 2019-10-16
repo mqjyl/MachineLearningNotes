@@ -93,6 +93,11 @@ $$
    `!$\mathscr{ABCDEFGHIJKLMN}$`
 6. 使用 \mathfrak 显示Fraktur字母（一种德国字体），如：
    `!$\mathfrak {ABCDEFGHIJKLMN \ \ abcdefghijklmn}$`
+7. \mathsf
+   `!$\mathsf{ABCDEFGHIJKLMN}$`
+8. \mathcal   \cal
+   `!$\mathcal{ABCDEFGHIJKLMN}$`           `!$\cal{ABCDEFGHIJKLMN}$`
+   
    
 ##### 8、特殊函数和符号
 
