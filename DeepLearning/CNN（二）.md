@@ -73,7 +73,7 @@ grammar_cjkRuby: true
 
 ![enter description here](./images/1560572363126.png)
 
-`$#3x3 reduce / #5x5 reduce$` 指的是 3x3 和 5x5 卷积前用于降维的 1x1 卷积核的数目，和output size一列做对比，可以看出通道数明显减少，且 5x5 卷积要比 3x3 卷积通道数减少的更多。
+`!$#3x3 reduce / #5x5 reduce$` 指的是 3x3 和 5x5 卷积前用于降维的 1x1 卷积核的数目，和output size一列做对比，可以看出通道数明显减少，且 5x5 卷积要比 3x3 卷积通道数减少的更多。
 
 ##### （三）、Inception-BN
 
