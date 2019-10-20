@@ -82,3 +82,73 @@ grammar_html: true
 | `!$\smile$` | \smile |  | `!$\notin$` | \notin | 不是...的成员 |
 | `!$\models$` | \models | 楷模 | `!$\mid$` | \mid | 分歧 |
 | `!$\perp$` | \perp | 与...垂直 |
+
+##### 5、二元运算符
+| 符号 | LaTex公式 | 说明 | 符号 | LaTex公式 | 说明 |
+| --- | --- | --- | --- | --- | --- |
+| `!$\pm$` | \pm | 加或减 | `!$\cap$` | \cap | 设置交集 |
+| `!$\mp$`| \mp | 减去或加号 | `!$\cup$`| \cup | 设置联盟 |
+| `!$\times$` | \times | 乘以 | `!$\uplus$` | \uplus | multiset加法 |
+| `!$\div$` | \div | 除以 | `!$\sqcap$` | \sqcap |  |
+| `!$\ast$` | \ast | 星号 | `!$\sqcup$` | \sqcup |  |
+| `!$\star$` | \star |  | `!$\vee$`| \vee |  |
+| `!$\dagger$` | \dagger |  |  `!$\wedge$` | \wedge |  |
+| `!$\ddagger$` | \ddagger |  | `!$\cdot$`| \cdot |  |
+| `!$\diamond$` | \diamond |  | `!$\oplus$` | \oplus |  |
+| `!$\bigtriangleup$` | \bigtriangleup |  | `!$\ominus$` | \ominus |  |
+| `!$\bigtriangledown$` | \bigtriangledown |  | `!$\otimes$` | \otimes |  |
+| `!$\triangleleft$` | \triangleleft |  | `!$\oslash$` | \oslash |  |
+| `!$\triangleright$` | \triangleright |  | `!$\odot$` | \odot |  |
+| `!$\bigcirc$` | \bigcirc |  | `!$\circ$` | \circ |  |
+| `!$\bullet$` | \bullet |  | `!$\setminus$` | \setminus | 设定差异 |  |
+| `!$\wr$` | \wr |  | `!$\amalg$` | \amalg |  |
+
+##### 6、否定二元运算符
+| 符号 | LaTex公式 | 说明 | 符号 | LaTex公式 | 说明 |
+| --- | --- | --- | --- | --- | --- |
+| `!$\neq$` 或 `!$\ne$` | \neq 或 \ne | 不等于 | `!$\notin$` | \notin | 不是...的成员 |
+| `!$\nless$` | \nless | 不低于 | `!$\ngtr$` | \ngtr | 不大于 |
+| `!$\nleq$` | \nleq | 不小于或等于 | `!$\ngeq$` | \ngeq | 不大于或等于 |
+| `!$\nleqslant$`| \nleqslant |  | `!$\ngeqslant$` | \ngeqslant |  |
+| `!$\nleqq$` | \nleqq |  | `!$\ngeqq$` | \ngeqq |  |
+| `!$\lneq$` | \lneq |  | `!$\gneq$` | \gneq |  |
+| `!$\lneqq$` | \lneqq |  | `!$\gneqq$` | \gneqq |  |
+| `!$\lvertneqq$` | \lvertneqq |  | `!$\gvertneqq$` | \gvertneqq |  |
+| `!$\lnsim$` | \lnsim |  | `!$\gnsim$` | \gnsim |  |
+| `!$\lnapprox$` | \lnapprox |  | `!$\gnapprox$` | \gnapprox |  |
+| `!$\nprec$` | \nprec | 没有先于 | `!$\nsucc$` | \nsucc | 没有成功 |
+| `!$\npreceq$` | \npreceq | 既不先行也不等 | `!$\nsucceq$` | \nsucceq | 既不成功也不等于 |
+| `!$\precneqq$` | \precneqq |  | `!$\succneqq$` |  \succneqq |  |
+| `!$\precnsim$` | \precnsim  |  | `!$\succnsim$` | \succnsim  |  |
+| `!$\precnapprox$` | \precnapprox  |  | `!$\succnapprox$` | \succnapprox  |  |
+| `!$\nsim$`  | \nsim | 与...不相似 | `!$\ncong$` | \ncong | 是不一致的 |
+| `!$\nshortmid$` | \nshortmid |  | `!$\nshortparallel$` | \nshortparallel |  |
+| `!$\nmid$` | \nmid |  | `!$\nparallel$` | \nparallel | 与...不平行 |
+| `!$\nvdash$` | \nvdash |  | `!$\nvDash$` | \nvDash |  |
+| `!$\nVdash$` | \nVdash |  | `!$\nVDash$` | \nVDash |  |
+| `!$\ntriangleleft$` | \ntriangleleft |  | `!$\ntriangleright$` | \ntriangleright |  |
+| `!$\ntrianglelefteq$` | \ntrianglelefteq |  | `!$\ntrianglerighteq$` | \ntrianglerighteq |  |
+| `!$\nsubseteq$` | \nsubseteq |  | `!$\nsupseteq$` | \nsupseteq |  |
+| `!$\nsubseteqq$` | \nsubseteqq |  | `!$\nsupseteqq$` | \nsupseteqq |  |
+| `!$\subsetneq$` | \subsetneq |  | `!$\supsetneq$` | \supsetneq |  |
+| `!$\varsubsetneq$` | \varsubsetneq |  | `!$\varsupsetneq$` | \varsupsetneq |  |
+| `!$\subsetneqq$` | \subsetneqq |  | `!$\supsetneqq$` | \supsetneqq |  |
+| `!$\varsubsetneqq$` | \varsubsetneqq |  | `!$\varsupsetneqq$` | \varsupsetneqq |  |
+
+##### 7、集合表示法
+| 符号 | LaTex公式 | 说明 | 符号 | LaTex公式 | 说明 |
+| --- | --- | --- | --- | --- | --- |
+| `!$\emptyset$`和 `!$\varnothing$` | \emptyset 和 \varnothing | 空集 | `!$\mathbb{N}$` | \mathbb{N} | 一组自然数 |
+| `!$\mathbb{Z}$` | \mathbb{Z} | 整数集 | `!$\mathbb{Q}$` | \mathbb{Q} | 一组有理数 |
+| `!$\mathbb{A}$` | \mathbb{A}  | 一组代数数 | `!$\mathbb{R}$` | \mathbb{R} | mathbb{R} | 一组实数 |
+| `!$\mathbb{C}$` | \mathbb{C}  | 一组复数 | `!$\mathbb{H}$` | \mathbb{H} | 四元数集 |
+| `!$\mathbb{O}$` | \mathbb{O}  | 一组八进制 | `!$\mathbb{S}$` | \mathbb{S} | 一套sedenions |
+| `!$\in$` | \in | 是...的成员 | `!$\notin$` | \notin | 不是...的成员 |
+| `!$\ni$` | \ni  | 拥有（有会员） | `!$\subset$` | \subset | 是适当的子集 |
+| `!$\subseteq$` | \subseteq | 是的子集 | `!$\supset$` | \supset | 是适当的超集 |
+| `!$\supseteq$` | \supseteq | 是超集 | `!$\cup$` | \cup | 设置联盟 |
+| `!$\cap$` | \cap | 设置交集 | `!$\setminus$` | \setminus | 设定差异 |
+
+##### 8、逻辑表示法
+| 符号 | LaTex公式 | 说明 | 符号 | LaTex公式 | 说明 |
+| --- | --- | --- | --- | --- | --- |
