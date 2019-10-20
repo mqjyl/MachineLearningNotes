@@ -174,19 +174,19 @@ grammar_html: true
 ##### 10、分隔符
 | 符号 | LaTex公式 | 说明 | 符号 | LaTex公式 | 说明 |
 | --- | --- | --- | --- | --- | --- |
- | `!$\|$` | \| | 分歧 | `!$\$$` | \$ | \ |
- | `!$( ,$` | ( , | 左括号 | `!$) ,$` | ) , | 右括号 |
- | `!${$` | { | 左支撑 | `!$}$` | } | 右支撑 |
- | `!$\lceil$` | \lceil | 天花板（左） | `!$\rceil$` | \rceil | 天花板（右） |
- | `!$\ulcorner$` | \ulcorner |  | `!$\urcorner$` | \urcorner |  |
- | `!$/$` | / | 削减 | `!$\backslash$` | \backslash |  |
- | `!$[ ,$` | [ , | 左[方]支架 | `!$] ,$` | ] , | 右[方]支架 |
- | `!$\langle$` | \langle | 左角支架 | `!$\rangle$` | \rangle | 右角支架 |
- | `!$\lfloor$` | \lfloor | 地板（左） | `!$\rfloor$` | \rfloor | 地板（右） |
- | `!$\llcorner$` | \llcorner |  | `!$\lrcorner$` | \lrcorner |  |
+| `!$\|$` | \| | 分歧 | `!$\$$` | \$ | \ |
+| `!$( ,$` | ( , | 左括号 | `!$) ,$` | ) , | 右括号 |
+| `!${$` | { | 左支撑 | `!$}$` | } | 右支撑 |
+| `!$\lceil$` | \lceil | 天花板（左） | `!$\rceil$` | \rceil | 天花板（右） |
+| `!$\ulcorner$` | \ulcorner |  | `!$\urcorner$` | \urcorner |  |
+| `!$/$` | / | 削减 | `!$\backslash$` | \backslash |  |
+| `!$[ ,$` | [ , | 左[方]支架 | `!$] ,$` | ] , | 右[方]支架 |
+| `!$\langle$` | \langle | 左角支架 | `!$\rangle$` | \rangle | 右角支架 |
+| `!$\lfloor$` | \lfloor | 地板（左） | `!$\rfloor$` | \rfloor | 地板（右） |
+| `!$\llcorner$` | \llcorner |  | `!$\lrcorner$` | \lrcorner |  |
  
  ##### 11、方向箭头
- | 符号 | LaTex公式 | 说明 | 符号 | LaTex公式 | 说明 |
+| 符号 | LaTex公式 | 说明 | 符号 | LaTex公式 | 说明 |
 | --- | --- | --- | --- | --- | --- |
 | `!$\rightarrow 或 \to$` | \rightarrow 或 \to |  | `!$\Rightarrow$` | \Rightarrow |  |
 | `!$\mapsto$` | \mapsto |  | `!$\Longleftarrow$` | \Longleftarrow |  |
@@ -196,3 +196,13 @@ grammar_html: true
 | `!$\uparrow$` | \uparrow | Knuth的向上箭头符号 | `!$\Uparrow$` | \Uparrow  |  |
 | `!$\downarrow$` | \downarrow |  | `!$\Downarrow$` | \Downarrow |  |
 | `!$\updownarrow$` | \updownarrow |  | `!$\Updownarrow$` | \Updownarrow |  |
+
+##### 12、其他符号
+| 符号 | LaTex公式 | 说明 | 符号 | LaTex公式 | 说明 |
+| --- | --- | --- | --- | --- | --- |
+| `!$\partial$` | \partial  | 偏导数 | `!$\imath$` | \imath |   |
+| `!$\eth$` | \eth |  | `!$\jmath$` | \jmath |   |
+| `!$\hbar$` | \hbar | 减少了普朗克的常数 | `!$\ell$` | \ell  |   |
+| `!$\Re$` | \Re | 真实的部分 | `!$\nabla$` | \nabla  | del（矢量微积分）  |
+| `!$\Im$` | \Im | 想象的部分 | `!$\Box$` | \Box |   |
+| `!$\wp$` | \wp | [维尔斯特拉斯]幂 | `!$\infty$` | \infty  | 无穷  |
