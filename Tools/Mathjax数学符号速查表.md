@@ -206,3 +206,4 @@ grammar_html: true
 | `!$\Re$` | \Re | 真实的部分 | `!$\nabla$` | \nabla  | del（矢量微积分）  |
 | `!$\Im$` | \Im | 想象的部分 | `!$\Box$` | \Box |   |
 | `!$\wp$` | \wp | [维尔斯特拉斯]幂 | `!$\infty$` | \infty  | 无穷  |
+
