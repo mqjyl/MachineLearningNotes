@@ -152,3 +152,21 @@ grammar_html: true
 ##### 8、逻辑表示法
 | 符号 | LaTex公式 | 说明 | 符号 | LaTex公式 | 说明 |
 | --- | --- | --- | --- | --- | --- |
+| `!$\exists$` | \exists | 至少存在一个 |  `!$\exists!$` | \exists! | 只存在一个 | 
+| `!$\nexists$` | \nexists  | 没有 |  `!$\forall$` | \forall | 对全部 | 
+| `!$\neg$` | \neg  | 不（逻辑上没有） |  `!$\lor$` | \lor | 或（逻辑或） | 
+| `!$\land$` | \land  | 和（逻辑和） |  `!$\Longrightarrow$` 或 `!$\implies$` | \Longrightarrow 或 \implies | 暗示 | 
+| `!$\Rightarrow$` | \Rightarrow  | 首选右侧 | `!$\Longleftarrow$` | \Longleftarrow | 暗示（仅当） |
+| `!$\Leftarrow$` | \Leftarrow | 首选左侧 | `!$\iff$` | \iff | 相当于（当且仅当iff） |
+| `!$\Leftrightarrow$` | \Leftrightarrow | 等同于优先 | `!$\top$` | \top |  |
+| `!$\bot$` | \bot |  | 
+
+##### 9、几何表示法
+| 符号 | LaTex公式 | 说明 | 符号 | LaTex公式 | 说明 |
+| --- | --- | --- | --- | --- | --- |
+| `!$\overline{\rm AB}$` | \overline | 分割 | `!$\overrightarrow{\rm AB}$` | \overrightarrow | 射线（半线） |
+| `!$\angle$` | \angle | 角度 | `!$\measuredangle$` | \measuredangle | 测量角度 |
+| `!$\triangle$` | \triangle | 三角形 | `!$\square$` | \square | 广场 |
+| `!$\cong$` | \cong | 一致的（相同的形状和大小） | `!$\ncong$` | \ncong | 不一致 |
+| `!$\sim$` | \sim | 相似（相同的形状） | `!$\nsim$` | \nsim | 不相似 |
+| `!$\perp$` | \perp | 垂直于 | `!$\not\perp$` | \not\perp | 与...不垂直 |
