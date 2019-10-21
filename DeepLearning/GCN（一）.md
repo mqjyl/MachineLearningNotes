@@ -5,6 +5,8 @@ grammar_cjkRuby: true
 grammar_html: true
 ---
 
+[TOC]
+
 #### 一、GCN（Graph Convalutional Network）
 ###### （一）、为什么要研究GCN?
 　　CNN处理的图像或视频数据中的像素点是排列成很整齐的矩阵，也就是很多论文中提到的（Euclidean Structure），而很多时候我们需要处理的是Non Euclidean Structure的数据，比如社交网络。
