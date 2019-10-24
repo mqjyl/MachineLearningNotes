@@ -609,6 +609,18 @@ $$
 
 ### 10、GCN处理不同类型的图
 
+**1、关于带权图问题**
+GCN论文里的针对的是无权的无向图，并且采用的是平均聚合的方法，邻居之间没有权重。但是，现实生活中更多的是带权图。不过GCN还是可以直接处理带权图，原来的邻居矩阵取值只能是0和1，现在可以取更多的权值。
 
+**2、关于有向图问题**
+前面的都是针对于无向图的问题，所有拉普拉斯矩阵是对称矩阵，但是在有向图中，就不能定义拉普拉斯矩阵了。目前的两种解决思路：
+（a）要想保持理论上的完美，就需要重新定义图的邻接关系，保持对称性。比如这篇文章[MotifNet: a motif-based Graph Convolutional Network for directed graphs](https://arxiv.org/abs/1802.01572) 提出利用Graph Motifs定义图的邻接矩阵。
 
+（b）如果只是为了应用，有其他形式的GCN或者GAT可以处理有向图
 
+值得说明的是：GAT作者写道“It is worth noting that, as Kipf & Welling (2017) and Atwood & Towsley (2016), our work can also be reformulated as a particular instance of MoNet (Monti et al., 2016). ”
+
+也就是说本质上这些模型都可以认为是在重新定义了图的邻接关系后，再进行基本的卷积运算。
+
+**3、节点没有特征的图**
+对于很多网络，可能没有节点的特征，这个时候也是可以使用GCN的，如论文中作者对那个俱乐部网络，采用的方法就是用单位矩阵 I 替换特征矩阵 X。
