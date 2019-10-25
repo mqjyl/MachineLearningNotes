@@ -24,10 +24,17 @@ Deep learning 中的 Convolution 就是要设计含有 trainable 共享参数的
 **1、第一代的GCN(Spectral Networks and Deep Locally Connected Networks on Graph)简单粗暴地把 `!$diag(\hat h(\lambda_l) )$` 变成了卷积核 `!$diag(\theta_l )$`，也就是：**
 ```mathjax!
 $$
-y_{output}=\sigma \left(U\left(\begin{matrix}\theta_1 &\\&\ddots \\ &&\theta_n \end{matrix}\right) U^T x \right) \tag{4}
+y_{output}=\sigma \left(U g_\theta(\Lambda)U^T x \right) \tag{4}
 $$
 ```
-　　式（3）就是标准的第一代GCN中的layer了，其中 `!$\sigma(\cdot)$` 是激活函数，`!$\Theta=({\theta_1},{\theta_2},\cdots,{\theta_n})$` 就跟三层神经网络中的 weight 一样是任意的参数，通过初始化赋值然后利用误差反向传播进行调整， x 就是graph上对应于每个顶点的 feature vector（由特数据集提取特征构成的向量）。
+（为避免混淆，本文中称 `!$g_\theta(\Lambda)$` 是卷积核， `!$Ug_\theta(\Lambda)U^T$` 的运算结果为卷积运算矩阵）
+```mathjax!
+$$
+g_\theta(\Lambda) = \left(\begin{matrix}\theta_1 &\\&\ddots \\ &&\theta_n \end{matrix}\right)
+$$
+```
+
+式（4）就是标准的第一代GCN中的layer了，其中 `!$\sigma(\cdot)$` 是激活函数，`!$\Theta=({\theta_1},{\theta_2},\cdots,{\theta_n})$` 就跟三层神经网络中的 weight 一样是任意的参数，通过初始化赋值然后利用误差反向传播进行调整， x 就是graph上对应于每个顶点的 feature vector（由特数据集提取特征构成的向量）。
 　　1）这里的spectral graph convolution指的是
 ```mathjax!
 $$
@@ -45,33 +52,39 @@ $$
 **2、第二代的GCN(Convolutional Neural Networks on Graphs With Fast Localized Spectral Filtering)把 `!$\hat h(\lambda_l)$` 巧妙地设计成了 `!$\sum_{j=0}^K \alpha_j \lambda^j_l$` ，也就是：**
 ```mathjax!
 $$
- y_{output}=\sigma \left(U\left(\begin{matrix}\sum_{j=0}^K \alpha_j \lambda^j_1 &\\&\ddots \\ && \sum_{j=0}^K \alpha_j \lambda^j_n \end{matrix}\right) U^T x \right) \tag{6}
+ y_{output}=\sigma \left(U g_\theta(\Lambda)U^T x \right) \tag{6}
 $$
 ```
-　　利用矩阵乘法进行变换：
+
+```mathjax!
+$$
+g_\theta(\Lambda) = \left(\begin{matrix}\sum_{j=0}^K \alpha_j \lambda^j_1 &\\&\ddots \\ && \sum_{j=0}^K \alpha_j \lambda^j_n \end{matrix}\right)
+$$
+```
+利用矩阵乘法进行变换：
 ```mathjax!
 $$
  \left(\begin{matrix}\sum_{j=0}^K \alpha_j \lambda^j_1 &\\&\ddots \\ && \sum_{j=0}^K \alpha_j \lambda^j_n \end{matrix}\right)=\sum_{j=0}^K \alpha_j \Lambda^j
 $$
 ```
-　　因为 `!$L^2=U \Lambda U^TU \Lambda U^T=U \Lambda^2 U^T $` 且 `!$U^T U=E$`，进而可以导出：
+因为 `!$L^2=U \Lambda U^TU \Lambda U^T=U \Lambda^2 U^T $` 且 `!$U^T U=E$`，进而可以导出：
 ```mathjax!
 $$
 U \sum_{j=0}^K \alpha_j \Lambda^j U^T =\sum_{j=0}^K \alpha_j U\Lambda^j U^T = \sum_{j=0}^K \alpha_j L^j
 $$
 ```
-　　因此，(4)式可以写成：
+因此，(6)式可以写成：
 ```mathjax!
 $$
 y_{output}=\sigma \left( \sum_{j=0}^K \alpha_j L^j x \right) \tag{7}
 $$
 ```
-　　其中 `!$({\alpha_1},{\alpha_2},\cdots,{\alpha_K}) $` 是任意的参数，通过初始化赋值然后利用误差反向传播进行调整（训练的过程）。
+其中 `!$({\alpha_1},{\alpha_2},\cdots,{\alpha_K}) $` 是任意的参数，通过初始化赋值然后利用误差反向传播进行调整（训练的过程）。
 　　
-　　式(5)所设计的卷积核其优点在于：
-　　１、卷积核只有 K 个参数，一般 K 远小于 n。
-　　２、矩阵变换后，不需要做特征分解，直接用拉普拉斯矩阵 L 进行变换，计算复杂度变成了 `!$\mathcal{O}(n)$`。
-　　３、卷积核具有很好的 spatial localization，特别地，K 就是卷积核的receptive field，也就是说每次卷积会将中心顶点 K-hop neighbor上的 feature 进行加权求和，权系数就是 `!$\alpha_k$`。更直观地看， K=1 就是对每个顶点上一阶neighbor的feature进行加权求和，如下图所示：
+式(7)所设计的卷积核其优点在于：
+1. 卷积核只有 K 个参数，一般 K 远小于 n。
+2. 矩阵变换后，不需要做特征分解，直接用拉普拉斯矩阵 L 进行变换，计算复杂度变成了 `!$\mathcal{O}(n)$`。
+3. 卷积核具有很好的 spatial localization，特别地，K 就是卷积核的receptive field，也就是说每次卷积会将中心顶点 K-hop neighbor上的 feature 进行加权求和，权系数就是 `!$\alpha_k$`。更直观地看， K=1 就是对每个顶点上一阶neighbor的feature进行加权求和，如下图所示：
   
 ![图 10](./images/8.jpg)
 
@@ -378,10 +391,112 @@ $$
 
 ##### 8.1、GCN中的Local Connectivity
 
+(a)如果利用第一代GCN，根据式（3）卷积运算矩阵（ `!$U g_\theta(\Lambda)U^T$` ） 即为
 
+![图 16 第一代卷积核示意](./images/1571974250051.png)
 
+这个时候，可以发现这个卷积核没有local的性质，因为该卷积核得到的运算矩阵在所有位置上都有非0元素。以第一个顶点为例，如果考虑一阶local关系的话，那么卷积核中第一行应该只有\[1,1],\[1,2],\[1,5]这三个位置的元素非0。换句话说，这是一个global全连接的卷积核。
+
+(b)如果是第二代GCN，根据式（5）当 `!$K = 1$` 卷积运算矩阵即为
+
+![图 17 第二代卷积核示意（K=1）](./images/1571975041927.png)
+
+当 `!$K = 2$` 卷积运算矩阵即为：
+
+![图 18 第二代卷积核示意（K=2）](./images/1571975096182.png)
+
+看一下图的邻接结构，卷积运算矩阵的非0元素都在localize的位置上。
 
 ##### 8.2、GCN中的Parameter Sharing
+
+Parameter Sharing对于卷积运算来讲也是至关重要，因为如何sharing直接决定了参数的数量。在GCN可能更尤为重要了，因为graph上每个顶点的度都不一样，所以不能按照CNN的方式来进行sharing。
+
+这里介绍三种目前较为流行的GCN模型。
+
+**1 Defferrard, M., Bresson, X., & Vandergheynst, P. (2016)**
+
+这里的GCN运算可以写成如下公式：
+```mathjax!
+$$
+y = \sigma (U g_\theta(\Lambda)U^T x)  \\
+g_\theta(\Lambda) = \sum^K_{j = 1}\alpha_j \Lambda^j
+$$
+```
+以上的运算等价于：
+```mathjax!
+$$
+y = \sigma (\sum^K_{j = 1}\alpha_j L^j x) 
+$$
+```
+很明显 `!$\alpha_j$` 是可学习的参数，可以看到 `!$\alpha_j$` 与 `!$L^j$` 保持一致，我们知道 `!$L^j$` 对应着 `!$j$`阶neighbor，这意味着在同阶的邻居上参数共享（可以学习的参数相同），不同阶的邻居上参数不共享（可以学习的参数不同）。
+
+如图 17和18：
+
+我们可以看到，当 `!$K = 1$` ，只有一个参数，即所有一阶neighbor上学习的卷积系数都由共享的`!$\alpha_1$` 控制，更高阶的neighbor也没有参与运算。
+
+当 `!$K = 2$` ，可以注意到所有一阶neighbor上学习的卷积系数都由 `!$\alpha_1$` 和 `!$\alpha_2$` 控制，所有二阶neighbor上学习的卷积系数都仅由 `!$\alpha_2$` 控制。
+
+**优点：**
+
+- 这样的共享方式是有“物理意义”的，因为我们知道graph通常本身是有local stationary性质的。也就是说随着neighbor阶数的增加，顶点间的相关性递减（相当于距离近的邻域内相关性强）。这种共享方式，本质上可以很容易实现上述性质。
+- 参数很少，如果是超大规模的图，可以利用这种方式。
+
+**缺点：**
+
+- 参数太少了，只有 `!$K$` 个，使得模型无法很好地实现在同阶的邻域上分配不同的权重给不同的邻居（也就是GAT论文里说的 enable specifying different weights to different nodes in a neighborhood）
+
+**2 Kipf, T. N., & Welling, M. (2016)**
+
+作者的blog可谓让GCN一鸣惊人，其运算公式如下：
+```mathjax!
+$$
+H^{l + 1} = \sigma(\hat{D}^{-\frac 1 2}\hat{A}\hat{D}^{-\frac 1 2}H^lW^l)  \\
+H^0 = x
+$$
+```
+其中 `!$A$` 是graph的邻接矩阵， `!$\hat{A} = A + I$` 是为了实现self-accessible， `!$\hat{D}$` 是 `!$\hat{A}$` 中每个顶点的度矩阵。
+
+运算 `!$\hat{D}^{-\frac 1 2}\hat{A}\hat{D}^{-\frac 1 2}$` 是为了对 `!$\hat{A}$` 进行归一化，防止在运算中出现数值不稳定的情况。
+
+这个版本中，记 `!$Y^l = \hat{D}^{-\frac 1 2}\hat{A}\hat{D}^{-\frac 1 2}H^l$` ，这个运算可以理解为实现了空间信息的聚合，类似于下图。其中第0层的输入，是原始的特征，以后每增加一层，就会多聚合一阶neighbor上的信息（ `!$l$` 层就对每个顶点融合了 `!$l$` 阶邻域的信息）。
+
+![图 19 空间信息的聚合示意](./images/v2-709f42b452e22c34c3469af8d971ecc2_hd.jpg)
+
+很显然模型可学习的参数是 `!$W^l$` ，`!$Y^lW^l$` 进行了线性变换，我个人认为是实现了feature augment。也就是说模型在每一层共享了用于特征增强的参数变化矩阵。矩阵 `!$W^l$` 的两个维度分别是 （ `!$H^l$` 的第二个维度，根据特征增强需要设计的维度（是超参数））。很显然，这个矩阵维度与顶点数目或者每个顶点的度无关，于是说这是一个在同层内顶点上共享的参数矩阵。
+
+
+**优点：**
+
+- 这样的共享方式， `!$W^l$` 的维度是可以进行调节的，与顶点的数目无关，使得模型可以用于大规模的graph数据集。另一方面这个模型可以完成图结构train在test上不一样的任务。
+
+**缺点：**
+
+- 这个模型对于同阶的邻域上分配给不同的邻居的权重是完全相同的（也就是GAT论文里说的无法 enable specifying different weights to different nodes in a neighborhood）。这一点限制了模型对于空间信息的相关性的捕捉能力，这也是在很多任务上不如GAT的根本原因。
+
+**3 Zhang, Z., Li, M., Lin, X., Wang, Y., & He, F. (2019)**
+
+（[Multistep speed prediction on traffic networks: A deep learning approach considering spatio-temporal dependencies](https://link.zhihu.com/?target=https%3A//www.sciencedirect.com/science/article/pii/S0968090X18315389%3Fdgcid%3Dcoauthor)）
+
+我使用的GCN其实是一种不共享参数的形式，其计算具体如下：
+```mathjax!
+$$
+A_{GC}^K = C_i\{(A + I)^K\}  \\
+y = (A_{GC}^K\bigodot W_{GC}) \cdot x
+$$
+```
+
+`!$(A + I)^K$` 是为了构建一个 `!$K$` 阶可达的类邻接矩阵， `!$C_i(\cdot)$` 是归一化的算子，防止出现数值不稳定的情况。 `!$W_{GC}$` 是一个和graph邻接矩阵维度相同的参数矩阵。
+
+`!$A_{GC}^K\bigodot W_{GC}$` 是一个逐位乘法，其作用相当于添加了一个mask矩阵，使得参数矩阵只在 `!$K$` 阶neighbor的位置上有参数，其余位置均为0。
+
+**优点：**
+
+- 这样的共享方式，在规模较小的graph数据集上极大地提高了对于空间相关性的刻画能力，可以实现对于任意的邻居分配任意的权重系数，也就是和GAT一样可以enable specifying different weights to different nodes in a neighborhood。
+- 学习完的参数矩阵具有可解释性，这一点和GAT的相关系数 `!$e_{i,j}$` 类似，通过分析 `!$W_{GC}[i,j]$` 对于模型刻画的空间相关性进行分析，然后再与真实的物理条件进行对比。我在论文中对于交通场景中的理解进行了较为细致的分析，大家感兴趣可以参考。
+
+**缺点：**
+
+- 参数量与图的规模有关，也就是说对于对于顶点数目为 `!$N$` 的图，其参数量为 `!$N * N$` ，可以想象在大规模的数据集上，内存很可能会溢出。当然也无法在train和test阶段graph结构不一样的任务上应用。
 
 
 ### 9、 从空间角度理解GCN
@@ -390,7 +505,7 @@ $$
 
 如下图所示，红色节点S1的邻居正是蓝色节点B1,B2,B3，这些邻居节点根据一定的规则将信息，也就是特征，汇总到红色节点上。
 
-![图 16](./images/gcn113.png)
+![图 20](./images/gcn113.png)
 
 通常来说，会加入一个线性变换矩阵W，以作为汇聚节点特征的特征维度转换（或者说是映射），于是有
 ```mathjax!
@@ -624,3 +739,10 @@ GCN论文里的针对的是无权的无向图，并且采用的是平均聚合�
 
 **3、节点没有特征的图**
 对于很多网络，可能没有节点的特征，这个时候也是可以使用GCN的，如论文中作者对那个俱乐部网络，采用的方法就是用单位矩阵 I 替换特征矩阵 X。
+
+
+**参考：**
+
+[1]. Defferrard, M., Bresson, X., & Vandergheynst, P. (2016). Convolutional neural networks on graphs with fast localized spectral filtering. InAdvances in neural information processing systems(pp. 3844-3852).
+
+[2]. Kipf, T. N., & Welling, M. (2016). Semi-supervised classification with graph convolutional networks.arXiv preprint arXiv:1609.02907.
