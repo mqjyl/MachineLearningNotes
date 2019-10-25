@@ -746,3 +746,5 @@ GCN论文里的针对的是无权的无向图，并且采用的是平均聚合�
 [1]. Defferrard, M., Bresson, X., & Vandergheynst, P. (2016). Convolutional neural networks on graphs with fast localized spectral filtering. InAdvances in neural information processing systems(pp. 3844-3852).
 
 [2]. Kipf, T. N., & Welling, M. (2016). Semi-supervised classification with graph convolutional networks.arXiv preprint arXiv:1609.02907.
+
+[3]. https://zhuanlan.zhihu.com/p/72373094
