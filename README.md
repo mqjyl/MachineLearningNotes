@@ -1,2 +1,2 @@
-# MachineLearningNotes
+# 笔记分类
 机器学习笔记
