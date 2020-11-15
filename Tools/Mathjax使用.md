@@ -3,6 +3,7 @@ title: Mathjax使用
 tags: 数学公式,Letex,Mathjax
 grammar_cjkRuby: true
 grammar_html: true
+grammar_mathjax: true
 ---
 
 #### 一、MathJax简介
